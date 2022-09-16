@@ -1,1 +1,0 @@
-console.log('Venor_LeftSideBlock::js/default.js')

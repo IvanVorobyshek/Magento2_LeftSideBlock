@@ -2,21 +2,19 @@
 /** @var \Vendor\LeftSideBlock\Block\Template $block */
 ?>
 
-<div class="template">
-   <p>Maybe it will interest you:</p>
-   <?php
+<div class="template">  
+   <p> <?= __('Maybe it will interest you:') ?></p>
+   <?php 
       $productCollection = $block->getProductCollection();
-      foreach ($productCollection as $product) {
-         echo "<div class='divproduct_leftsideblock'>";
-            echo "<div class='divimg_leftsideblock'>";
-               echo "<a href=". $product->getProductUrl() ."> <img class='img_leftsideblock' src=".$product->getMediaConfig()->getBaseMediaUrl()."".$product->getImage()." /> </a>";
-            echo "</div>";
-            echo "<div class='divprice_leftsideblock'>";
-               echo "<a href=". $product->getProductUrl() .">". $product->getName() ."</a>";
-               echo "<p>". $block->getCurrency() . number_format($product->getPrice(), 2, '.',' ') ."</p>";
-            echo "</div>";
-         echo "</div>";
-      }
-   ?>
-   
-   </div>
+      foreach ($productCollection as $product) : ?>
+         <div class='divproduct_leftsideblock'>
+            <div class='divimg_leftsideblock'>
+               <a href="<?= $product->getProductUrl() ?>"> <img class='img_leftsideblock' src="<?=$block->getImageUrl($product) ?>" /> </a>  
+            </div>
+            <div class='divprice_leftsideblock'>
+               <a href="<?= $product->getProductUrl() ?> "> <?= $product->getName() ?> </a>
+               <p> <?= $block->getPriceWithCurrency($product->getPrice()) ?> </p>
+            </div>
+         </div>    
+   <?php endforeach; ?>
+</div>
