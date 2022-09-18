@@ -16,16 +16,16 @@ class Side extends Template
     private $currency;
     private $imageHelper;
     private $dataHelper;
-    const PRODNUMTOSHOW = 3;
+    public const PRODNUMTOSHOW = 3;
 
-    public function __construct( 
+    public function __construct(
         Template\Context $context,
         CollectionFactory $productCollectionFactory,
-        Visibility $productVisibility, 
+        Visibility $productVisibility,
         ImageHelper $imageHelper,
         DataHelper $dataHelper,
-        array $data = [])
-    {
+        array $data = []
+    ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_productVisibility = $productVisibility;
         $this->imageHelper = $imageHelper;
@@ -36,23 +36,24 @@ class Side extends Template
     public function getProductCollection()
     {
         $collection = $this->_productCollectionFactory->create();
-        $collection->addAttributeToSelect(array('name', 'price', 'url_key', 'small_image'));// выбираем требуемые атрибуты товара
+        // выбираем требуемые атрибуты товара
+        $collection->addAttributeToSelect(['name', 'price', 'url_key', 'small_image']);
         $collection->addAttributeToFilter('type_id', ['eq' => 'simple']);// только simple товары
-        $collection->addWebsiteFilter(); // фильтруем товары текущего сайта
-        $collection->addStoreFilter(); // фильтруем товары текущего магазина
-        $collection->setVisibility($this->_productVisibility->getVisibleInSiteIds()); // устанавливаем фильтр видимости товаров
+        $collection->addWebsiteFilter();// фильтруем товары текущего сайта
+        $collection->addStoreFilter();// фильтруем товары текущего магазина
+        // устанавливаем фильтр видимости товаров
+        $collection->setVisibility($this->_productVisibility->getVisibleInSiteIds());
         $collection->getSelect()->orderRand()->limit(self::PRODNUMTOSHOW);//перемешиваем и выбираем только 3 товара
         return $collection;
     }
 
-    public function getImageUrl(Product $product):string
+    public function getImageUrl(Product $product):string//get the Image URL from ImageHelper
     {
         return $this->imageHelper->init($product, 'gift_messages_checkout_small_image')->getUrl();
     }
 
-    public function getPriceWithCurrency(string $price):string
+    public function getPriceWithCurrency(string $price):string//get the formatted price with currency
     {
-        return $this->dataHelper->currency(number_format($price,2),true,false);
+        return $this->dataHelper->currency(number_format($price, 2), true, false);
     }
-
 }
